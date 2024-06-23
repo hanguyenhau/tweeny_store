@@ -1,5 +1,6 @@
 package com.tweeny_store.tweeny_store.model.user;
 
+import com.tweeny_store.tweeny_store.model.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -35,6 +36,8 @@ public class User implements UserDetails, Principal {
     private String phone;
     private boolean accountLocked;
     private boolean enabled;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles;
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createDate;

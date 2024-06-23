@@ -1,4 +1,4 @@
-package com.tweeny_store.tweeny_store.model.user;
+package com.tweeny_store.tweeny_store.model.auth;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -11,13 +11,8 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-public class UserRequest {
-    @NotEmpty(message = "Firstname is mandatory")
-    @NotBlank(message = "Firstname is mandatory")
-    private String firstname;
-    @NotEmpty(message = "Lastname is mandatory")
-    @NotBlank(message = "Lastname is mandatory")
-    private String lastname;
+public class AuthenticationRequest {
+
     @Email(message = "Email is not formatted")
     @NotEmpty(message = "Email is mandatory")
     @NotBlank(message = "Email is mandatory")
