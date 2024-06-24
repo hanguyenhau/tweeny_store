@@ -13,6 +13,26 @@ spring:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: smtp.gmail.com
+    port: 9000
+    username: haukutekontum1@gmail.com
+    password: store123@
+    default-encoding: UTF-8
+    properties:
+      mail:
+        mime:
+          charset: UTF
+        smtp:
+          writetimeout: 10000
+          connectiontimeout: 10000
+          timeout: 10000
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    verify:
+      host: http://localhost:9000
 application:
   security:
     jwt:
