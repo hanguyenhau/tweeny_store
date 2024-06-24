@@ -8,6 +8,7 @@ import com.tweeny_store.tweeny_store.model.user.UserRequest;
 import com.tweeny_store.tweeny_store.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,13 +20,14 @@ import static com.tweeny_store.tweeny_store.exception.BussinessErrorCode.DUPLICA
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User createUser(UserRequest request, Role roles) {
         var user = User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .roles(List.of(roles))
                 .accountLocked(false)
                 .enabled(false)

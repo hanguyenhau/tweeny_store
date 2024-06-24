@@ -1,5 +1,7 @@
 package com.tweeny_store.tweeny_store.controller.auth;
 
+import com.tweeny_store.tweeny_store.model.auth.AuthenticationRequest;
+import com.tweeny_store.tweeny_store.model.auth.AuthenticationResponse;
 import com.tweeny_store.tweeny_store.model.user.UserRequest;
 import com.tweeny_store.tweeny_store.service.auth.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,10 +29,10 @@ public class AuthenticationController {
         return ResponseEntity.accepted().build();
     }
 
-//    @PostMapping("/authentication")
-//    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request){
-//        return ResponseEntity.ok(service.authenticate(request));
-//    }
+    @PostMapping("/authentication")
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request){
+        return ResponseEntity.ok(service.authenticate(request));
+    }
 //
 //    @GetMapping("/activate-account")
 //    public void confirm(

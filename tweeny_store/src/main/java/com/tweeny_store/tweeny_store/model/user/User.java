@@ -72,6 +72,11 @@ public class User implements UserDetails, Principal {
     }
 
     @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
@@ -79,5 +84,9 @@ public class User implements UserDetails, Principal {
     @Override
     public String getName() {
         return "";
+    }
+
+    public String fullName(){
+        return firstname + " "+lastname;
     }
 }

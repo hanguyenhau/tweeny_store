@@ -77,6 +77,17 @@ public class GlobalExceptionHandle {
                                 .build()
                 );
     }
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ExceptionResponse> handleException(BadCredentialsException exp){
+        return ResponseEntity
+                .status(BAD_CREDENTIALS.getHttpStatus())
+                .body(ExceptionResponse
+                        .builder()
+                        .bussinessCode(BAD_CREDENTIALS.getCode())
+                        .bussinessErrorDescription(BAD_CREDENTIALS.getDescription())
+                        .error(exp.getMessage())
+                        .build());
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleException(MethodArgumentNotValidException exp){

@@ -40,8 +40,7 @@ public class SecurityConfig {
                                         "/configuration/security",
                                         "/swagger-ui/**",
                                         "/webjars/**",
-                                        "/swagger-ui.html",
-                                "/user/create"
+                                        "/swagger-ui.html"
                                 ).permitAll()
                                 .anyRequest()
                                 .authenticated())
