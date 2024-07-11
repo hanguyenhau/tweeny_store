@@ -6,8 +6,9 @@ import com.tweeny_store.tweeny_store.model.user.UserRequest;
 import jakarta.mail.MessagingException;
 
 public interface AuthenticationService {
-    void register(UserRequest request) throws MessagingException;
+    void register(UserRequest request) throws MessagingException, Exception;
     AuthenticationResponse authenticate(AuthenticationRequest request);
-    void activateAccount(String token);
+    void activateAccount(String token) throws Exception;
+    void resendToken(String email) throws Exception;
 }
 

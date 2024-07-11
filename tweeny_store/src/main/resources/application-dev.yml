@@ -15,9 +15,9 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   mail:
     host: smtp.gmail.com
-    port: 9000
-    username: haukutekontum1@gmail.com
-    password: store123@
+    port: 587
+    username: haukutekontum@gmail.com
+    password: iqpy cwtj xklv hlkh
     default-encoding: UTF-8
     properties:
       mail:
@@ -32,7 +32,7 @@ spring:
             enable: true
             required: true
     verify:
-      host: http://localhost:9000
+      host: http://localhost:8088
 application:
   security:
     jwt:

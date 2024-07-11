@@ -10,6 +10,7 @@ import com.tweeny_store.tweeny_store.repository.token.TokenRepository;
 import com.tweeny_store.tweeny_store.repository.user.UserRepository;
 import com.tweeny_store.tweeny_store.security.JwtService;
 import com.tweeny_store.tweeny_store.service.auth.AuthenticationService;
+import com.tweeny_store.tweeny_store.service.email.EmailService;
 import com.tweeny_store.tweeny_store.service.user.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
@@ -29,15 +31,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserService userService;
     private final TokenRepository tokenRepository;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final UserRepository userRepository;
 
-    public void register(UserRequest request) throws MessagingException {
+    public void register(UserRequest request) throws Exception {
         var userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new IllegalArgumentException("Role USER was not initialized"));
         var user = userService.createUser(request, userRole);
+        sendValidationEmail(user);
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -56,7 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-    public void activateAccount(String token) {
+    public void activateAccount(String token) throws Exception {
         Token savedToken = tokenRepository.findByToken(token)
                 .orElseThrow(()-> new RuntimeException("Invalid Token"));
         if(LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
@@ -71,7 +75,41 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         tokenRepository.save(savedToken);
     }
 
-    private void sendValidationEmail(User user) {
+    @Override
+    public void resendToken(String email) throws Exception {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Email is not register yet"));
+        sendValidationEmail(user);
+    }
 
+    private void sendValidationEmail(User user) throws Exception {
+        var newToken = generateAndSaveActivationToken(user);
+        emailService.sendSimpleMailMessage(
+                user.fullName(),
+                user.getEmail(),
+                newToken);
+    }
+
+    private String generateAndSaveActivationToken(User user) {
+        String generateToken = generateActivationCode(6);
+        var token = Token.builder()
+                .token(generateToken)
+                .createAt(LocalDateTime.now())
+                .expiresAt(LocalDateTime.now().plusMinutes(15))
+                .user(user)
+                .build();
+        tokenRepository.save(token);
+        return generateToken;
+    }
+
+    private String generateActivationCode(int length) {
+        String character = "0123456789";
+        StringBuilder codeBuilder = new StringBuilder();
+        SecureRandom secureRandom = new SecureRandom();
+        for(int i = 0; i<length; i++){
+            int randomIndex = secureRandom.nextInt(character.length());
+            codeBuilder.append(character.charAt(randomIndex));
+        }
+        return codeBuilder.toString();
     }
 }
